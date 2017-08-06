@@ -4,20 +4,14 @@
 
 'use strict';
 
-const fs = require('fs');
 const printFiles = require('./lib/print-files.js');
 
-let splice = (list, ...args) => {
-  if(typeof list === 'object')
-    return Array.prototype.splice.apply(list, args);
-  throw new Error('invalid input');
+let main = module.exports = (filepaths, callback) => {
+  printFiles(filepaths, (err, data) => {
+    if (err) return console.log(err);
+    console.log(data);
+    callback(null, data);
+  });
 };
 
-let list = splice(process.argv, 2);
-
-printFiles(list, (err, content) => {
-  if (err) {
-    return console.log(err);
-  }
-  console.log(content);
-});
+main(process.argv.slice(2), () => {});
